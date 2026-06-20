@@ -27,7 +27,7 @@ public class EscalaController2 {
                     continue;
                 }
 
-                String[] dados = line.split(",");
+                String[] dados = linha.split(",");
                 if (dados.length >= 3) {
                     lista.add(new Escala(dados[0], dados[1], dados[2]));
                 }
