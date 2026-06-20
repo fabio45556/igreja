@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Obreiros</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+        
+        tbody tr {
+            transition: background-color 0.3s ease;
+        }
+        
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .data-cell {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .setor-cell {
+            background-color: #f0f4ff;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        .empty-state p {
+            font-size: 16px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Escala de Obreiros</h1>
+        <p class="subtitle">Lista de designações para os setores da Igreja</p>
+        
+        <div class="table-wrapper" th:if="${!escala.isEmpty()}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Portaria</th>
+                        <th>Som</th>
+                        <th>Dirigente</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${escala}">
+                        <td class="data-cell" th:text="${item.data}"></td>
+                        <td th:text="${item.portaria}"></td>
+                        <td th:text="${item.som}"></td>
+                        <td th:text="${item.dirigente}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="empty-state" th:if="${escala.isEmpty()}">
+            <p>Nenhuma escala disponível no momento.</p>
+        </div>
+        
+        <div class="footer">
+            <p>Igreja - Sistema de Escala de Obreiros</p>
+        </div>
+    </div>
+</body>
+</html>

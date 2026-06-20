@@ -1,7 +1,10 @@
 package pj2.igreja;
 
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -9,11 +12,11 @@ import java.util.List;
 import java.util.Collections; // <-- IMPORTANTE: Adicione para usar o shuffle!
 import java.util.stream.Collectors; // <-- IMPORTANTE: Adicione para o ToList!
 
-@RestController
+@Controller
 public class EscalaController2 {
 
-    @GetMapping("/api/escala")
-    public List<Escala> listarEscala() {
+    // Método auxiliar para ler o CSV
+    private List<Escala> carregarEscalaDoCSV() {
         List<Escala> lista = new ArrayList<>();
         String caminhoArquivo = "escala.csv"; 
 
@@ -28,8 +31,8 @@ public class EscalaController2 {
                 }
 
                 String[] dados = linha.split(",");
-                if (dados.length >= 3) {
-                    lista.add(new Escala(dados[0], dados[1], dados[2]));
+                if (dados.length >= 4) {
+                    lista.add(new Escala(dados[0].trim(), dados[1].trim(), dados[2].trim(), dados[3].trim()));
                 }
             }
         } catch (Exception e) {
@@ -37,31 +40,41 @@ public class EscalaController2 {
         }
 
         return lista; 
-    } // <-- AQUI FECHA O MÉTODO listarEscala()
+    }
 
-    // GAVETA 2: Seu método de filtrar que agora está no lugar certo!
+    @GetMapping("/")
+    public String exibirEscala(Model model) {
+        List<Escala> escala = carregarEscalaDoCSV();
+        model.addAttribute("escala", escala);
+        return "escala";
+    }
+
+    @GetMapping("/api/escala")
+    public List<Escala> listarEscalaAPI() {
+        return carregarEscalaDoCSV();
+    }
+
+
+    // Método para obter irmãos disponíveis
     public List<String> obterIrmaosDisponiveis(List<String> listaTodos, List<String> listaOcupados) {
         List<String> resultado = listaTodos.stream()
                 .filter(nome -> !listaOcupados.contains(nome)) 
                 .collect(Collectors.toList());
 
         return resultado; 
-    } // <-- AQUI FECHA O MÉTODO obterIrmaosDisponiveis()
+    }
 
+    // Método para gerar sorteio exemplo
+    @GetMapping("/api/escala/gerar") 
+    public List<String> gerarSorteioExemplo() {
+        List<String> todosOsIrmaos = List.of("Pr Otacílio", "Co-pastor Davi", "Antônio", "Matheus", "Fernando");
+        List<String> irmãosBloqueados = List.of("Antônio");
 
-    // GAVETA 3: O terceiro método que você pediu para rodar o sorteio!
-   @GetMapping("/api/escala/gerar") 
-public List<String> gerarSorteioExemplo() {
-    List<String> todosOsIrmaos = List.of("Pr Otacílio", "Co-pastor Davi", "Antônio", "Matheus", "Fernando");
-    List<String> irmãosBloqueados = List.of("Antônio");
+        List<String> disponiveis = obterIrmaosDisponiveis(todosOsIrmaos, irmãosBloqueados);
 
-    // PASSO 1: A máquina trabalha e guarda a lista limpa na variável 'disponiveis'
-    List<String> disponiveis = obterIrmaosDisponiveis(todosOsIrmaos, irmãosBloqueados);
+        Collections.shuffle(disponiveis);
+        
+        return disponiveis; 
+    }
 
-    // PASSO 2: Você embaralha a variável 'disponiveis' (note o 's' minúsculo)
-    Collections.shuffle(disponiveis);
-
-    // PASSO 3: Retorna a lista embaralhada para o navegador
-    return disponiveis; 
-}
 } // <-- AQUI FECHA A CLASSE EscalaController2 (Última linha do arquivo)
