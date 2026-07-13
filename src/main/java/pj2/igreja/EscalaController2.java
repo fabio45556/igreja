@@ -9,9 +9,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Collections; // <-- IMPORTANTE: Adicione para usar o shuffle!
-import java.util.stream.Collectors; // <-- IMPORTANTE: Adicione para o ToList!
-
+import java.util.Collections; 
+import java.util.stream.Collectors; 
 @Controller
 public class EscalaController2 {
 
@@ -32,7 +31,8 @@ public class EscalaController2 {
 
                 String[] dados = linha.split(",");
                 if (dados.length >= 4) {
-                    lista.add(new Escala(dados[0].trim(), dados[1].trim(), dados[2].trim(), dados[3].trim()));
+                    String culto = dados.length >= 5 ? dados[4].trim() : "";
+                    lista.add(new Escala(dados[0].trim(), dados[1].trim(), dados[2].trim(), dados[3].trim(), culto));
                 }
             }
         } catch (Exception e) {
@@ -55,7 +55,7 @@ public class EscalaController2 {
     }
 
 
-    // Método para obter irmãos disponíveis
+    
     public List<String> obterIrmaosDisponiveis(List<String> listaTodos, List<String> listaOcupados) {
         List<String> resultado = listaTodos.stream()
                 .filter(nome -> !listaOcupados.contains(nome)) 
@@ -64,7 +64,7 @@ public class EscalaController2 {
         return resultado; 
     }
 
-    // Método para gerar sorteio exemplo
+    
     @GetMapping("/api/escala/gerar") 
     public List<String> gerarSorteioExemplo() {
         List<String> todosOsIrmaos = List.of("Pr Otacílio", "Co-pastor Davi", "Antônio", "Matheus", "Fernando");
@@ -77,4 +77,4 @@ public class EscalaController2 {
         return disponiveis; 
     }
 
-} // <-- AQUI FECHA A CLASSE EscalaController2 (Última linha do arquivo)
+} 
