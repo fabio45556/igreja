@@ -119,7 +119,7 @@
         <h1>📋 Escala de Obreiros</h1>
         <p class="subtitle">Lista de designações para os setores da Igreja</p>
         
-        <div class="table-wrapper" th:if="${!escala.isEmpty()}">
+        <div class="table-wrapper" th:if="${escala != null and !#lists.isEmpty(escala)}">
             <table>
                 <thead>
                     <tr>
@@ -143,7 +143,7 @@
             </table>
         </div>
         
-        <div class="empty-state" th:if="${escala.isEmpty()}">
+        <div class="empty-state" th:unless="${escala != null and !#lists.isEmpty(escala)}">
             <p>Nenhuma escala disponível no momento.</p>
         </div>
         
